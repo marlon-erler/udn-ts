@@ -68,3 +68,7 @@ UDN.requestMailbox();
 ## 1.0.8
 
 - fix bug where messages would be considered sent even if the WebSocket is not ready
+
+## 1.0.9
+
+- send confirmation to server that a message was received, necessary for mailboxes to function safely

@@ -17,21 +17,24 @@ export interface Message {
   unsubscribeChannel?: string;
   subscribed?: boolean; // sent by server
 
-  //sending message
+  // sending message
   messageChannel?: string;
   messageBody?: string;
+
+  // confirming message
+  confirmingMessageReceived?: boolean;
 }
 
 export default class UDNFrontend {
   ws: WebSocket | undefined;
 
   // HANDLERS
-  private connectionHandler = () => {};
-  private disconnectionHandler = () => {};
-  private messageHandler = (data: Message) => {};
-  private mailboxHandler = (mailboxId: string) => {};
-  private mailboxConnectionHandler = (mailboxId: string) => {};
-  private mailboxDeleteHandler = (mailboxId: string) => {};
+  private connectionHandler = () => { };
+  private disconnectionHandler = () => { };
+  private messageHandler = (data: Message) => { };
+  private mailboxHandler = (mailboxId: string) => { };
+  private mailboxConnectionHandler = (mailboxId: string) => { };
+  private mailboxDeleteHandler = (mailboxId: string) => { };
 
   // INIT
   set onconnect(handler: () => void) {
@@ -83,6 +86,7 @@ export default class UDNFrontend {
         } else if (data.deletedMailbox) {
           return this.mailboxDeleteHandler(data.deletedMailbox);
         } else {
+          this.send({ uuid: data.uuid, confirmingMessageReceived: true });
           this.messageHandler(data);
         }
       });
